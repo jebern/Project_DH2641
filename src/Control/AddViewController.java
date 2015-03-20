@@ -25,11 +25,16 @@ public class AddViewController implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == view.save) {
 			try {
-				model.addNewParkedActivity(model.getParked().size(), new Activity(view.name.getText(),
-						view.desc.getText(), Integer.parseInt(view.min
-								.getText()), view.select.getSelectedIndex() + 1));
-
-				view.dispose();
+				if(!view.name.getText().equals("")) {
+					model.addNewParkedActivity(model.getParked().size(), new Activity(view.name.getText(),
+							view.desc.getText(), Integer.parseInt(view.min
+									.getText()), view.select.getSelectedIndex() + 1));
+					
+					view.dispose();					
+				} else {
+					JOptionPane.showMessageDialog(view,
+							"You have to fill in the name field!");
+				}
 			} catch (NumberFormatException ex) {
 				JOptionPane.showMessageDialog(view,
 						"The length has to be an integer value");
