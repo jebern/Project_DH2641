@@ -26,7 +26,7 @@ public class AddViewController implements ActionListener {
 		if (e.getSource() == view.save) {
 			try {
 				if(!view.name.getText().equals("")) {
-					model.addNewParkedActivity(model.getParked().size(), new Activity(view.name.getText(),
+					model.addParkedActivity(model.getParked().size(), new Activity(view.name.getText(),
 							view.desc.getText(), Integer.parseInt(view.min
 									.getText()), view.select.getSelectedIndex() + 1));
 					

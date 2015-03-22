@@ -26,7 +26,7 @@ public class Day extends Observable {
 	public void setStart(int start) {
 		this.start = start;
 		setChanged();
-		notifyObservers("StartChanged");
+		notifyObservers();
 	}
 	
 	public ArrayList<Activity> getActs() {
@@ -34,22 +34,21 @@ public class Day extends Observable {
 	}
 
 	// removes an activity from the specific position
-	public Activity removeActs(int pos) {
-		Activity a = activities.remove(pos);
+	public void removeActs(int pos) {
+		activities.remove(pos);
 		setChanged();
-		notifyObservers("ActivityChange remove "+pos);
-		return a;
+		notifyObservers(pos);
 	}
 	
 	// adds an activity to specific position
-	public int addActs(Activity act,int position){
-		if(position > activities.size()) {
-			position = activities.size();
+	public void addActs(int pos, Activity act){
+		if(pos > activities.size()) {
+			pos = activities.size();
 		}
-		activities.add(position, act);
+		activities.add(pos, act);
+		Object[] o = {pos, act};
 		setChanged();
-		notifyObservers("ActivityChange");
-		return position;
+		notifyObservers(o);
 	}
 
 	// returns the total length of the acitivities in a day in minutes

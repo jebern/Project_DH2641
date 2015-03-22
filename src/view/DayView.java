@@ -32,9 +32,9 @@ public class DayView extends JPanel implements Observer {
 	public static final Color DISC_COLOR = new Color(210, 185, 152);
 	public static final Color BREAK_COLOR = new Color(206, 149, 152);
 
-	public DayView(Day d, AgendaModel m) {
+	public DayView(Day d, AgendaModel m, String id) {
 		this.d = d;
-		acts = new ActivityTable(d.getActs(), d);
+		acts = new ActivityTable(d.getActs(), d, id);
 		d.addObserver(this);
 		remove = new JButton("Delete day");
 		remove.setBackground(MainView.RED);
@@ -129,13 +129,23 @@ public class DayView extends JPanel implements Observer {
 
 	@Override
 	public void update(Observable arg0, Object message) {
-		end.setText(getEndTime());
-		if (((String) message).split(" ")[0].equals("ActivityChange")) {
+		if(message instanceof Integer) {
 			total.setText("Total time: " + (int) d.getTotalLength() + " min");
+			int pos =(int) message;
+			acts.removeActs(pos);
 			calcPer();
 			revalidate();
 			repaint();
-			validate();
+			validate();	
+		} else if (message instanceof Object[]) {
+			total.setText("Total time: " + (int) d.getTotalLength() + " min");
+			Object[] o = (Object[]) message;
+			acts.addActs((int) o[0], (Activity) o[1]);
+			calcPer();
+			revalidate();
+			repaint();
+			validate();	
 		}
+		end.setText(getEndTime());
 	}
 }

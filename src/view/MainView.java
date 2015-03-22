@@ -21,6 +21,7 @@ public class MainView extends JFrame implements Observer{
 	private GridBagConstraints c;
 	public static final Color RED = new Color(227,27,27);
 	public static final Color GREEN = new Color(133, 191, 130);
+	private int dayId = 0;
 
 	public static void main(String[] args) {
 		new MainView();
@@ -48,7 +49,7 @@ public class MainView extends JFrame implements Observer{
 		addAct = new JButton("+ Add activity");
 		addAct.setBackground(GREEN);
 		col1.add(addAct, BorderLayout.NORTH);
-		acts = new ActivityTable(model.getParked(), model);
+		acts = new ActivityTable(model.getParked(), model, "parked");
 		col1.add(acts, BorderLayout.CENTER);
 		
 		c.gridx = GridBagConstraints.RELATIVE;
@@ -76,7 +77,8 @@ public class MainView extends JFrame implements Observer{
 	}
 	
 	private void addDay(Day d) {
-		dayPanel.add(new DayView(d, model));
+		dayPanel.add(new DayView(d, model, "day"+dayId));
+		dayId++;
 	}
 	
 	private void delDay(int pos) {
@@ -85,10 +87,16 @@ public class MainView extends JFrame implements Observer{
 
 	@Override
 	public void update(Observable arg0, Object message) {
-		if(message instanceof Activity) {
-			acts.addActsToTable((Activity) message);
-		} else if (message instanceof Integer) {
-			delDay((Integer) message);
+		if(message instanceof Object[]) {
+			Object[] o = (Object[]) message;
+			acts.addActs((int) o[0], (Activity) o[1]);
+		} else if (message instanceof String) {
+			String[] s = ((String)message).split(" ");
+			if(s[0].equals("day")) {
+				delDay(Integer.parseInt(s[1]));				
+			} else {
+				acts.removeActs(Integer.parseInt(s[1]));
+			}
 		} else if (message instanceof Day) {
 			addDay((Day) message);							
 		}
